@@ -49,6 +49,17 @@ public:
 	}
 
 protected:
+	UPROPERTY(VisibleInstanceOnly)
+	class AEndlessRunnerGameModeBase* RunGameMode;
+
+	UPROPERTY()
+	FTimerHandle DestroyHandler;
+
+	UFUNCTION()
+	void OnTriggerBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherCamp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION()
+	void DestroyFloorTile();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
