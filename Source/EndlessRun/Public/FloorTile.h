@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/ArrowComponent.h"
 #include "GameFramework/Actor.h"
 #include "FloorTile.generated.h"
 
-class UArrowComponent;
+
 class UStaticMeshComponent;
 class USceneComponent;
 class UBoxComponent;
@@ -41,6 +42,11 @@ public:
 	UBoxComponent* FloorTriggerBox;
 	// Sets default values for this actor's properties
 	AFloorTile();
+
+	FORCEINLINE const FTransform& GetAttachTransform() const
+	{
+		return AttackPoint->GetComponentTransform(); 
+	}
 
 protected:
 	// Called when the game starts or when spawned
