@@ -4,12 +4,15 @@
 #include "FloorTile.h"
 
 #include "EndlessRunnerGameModeBase.h"
+#include "Obstacle.h"
 #include "RunCharacter.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
+
 AFloorTile::AFloorTile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -52,23 +55,43 @@ void AFloorTile::BeginPlay()
 	FloorTriggerBox->OnComponentBeginOverlap.AddDynamic(this,&AFloorTile::OnTriggerBoxOverlap);
 }
 
-// Called every frame
-
-void AFloorTile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AFloorTile::OnTriggerBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherCamp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ARunCharacter* RunCharacter = Cast<ARunCharacter>(OtherActor);
 
 	if (RunCharacter)
 	{
-		RunGameMode->AddFloorTile();
+		RunGameMode->AddFloorTile(true);
 
 		GetWorldTimerManager().SetTimer(DestroyHandler, this, &AFloorTile::DestroyFloorTile, 2.f, false);
+	}
+}
+
+void AFloorTile::SpawnItems()
+{
+	if (IsValid(SmallObstacleClass) && IsValid(BigObstacleClass))
+	{
+		SpawnLaneTile(CenterLane);
+		SpawnLaneTile(LeftLane);
+		SpawnLaneTile(RightLane);	
+	}
+}
+
+void AFloorTile::SpawnLaneTile(UArrowComponent* Lane)
+{
+	const float RandVal = FMath::FRandRange(0.f, 1.f);
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	const FTransform& SpawnLocation = Lane->GetComponentTransform();
+	
+	if (UKismetMathLibrary::InRange_FloatFloat(RandVal,0.5f, 0.75f,true,true))
+	{
+		AObstacle* Obstacle = GetWorld()->SpawnActor<AObstacle>(SmallObstacleClass,SpawnLocation,SpawnParameters);
+	}
+	else if (UKismetMathLibrary::InRange_FloatFloat(RandVal,0.75f, 1.f,true,true))
+	{
+		AObstacle* Obstacle = GetWorld()->SpawnActor<AObstacle>(BigObstacleClass,SpawnLocation,SpawnParameters);
 	}
 }
 

@@ -2,6 +2,7 @@
 
 
 #include "EndlessRunnerGameModeBase.h"
+#include "FloorTile.h"
 
 void AEndlessRunnerGameModeBase::BeginPlay()
 {
@@ -10,13 +11,28 @@ void AEndlessRunnerGameModeBase::BeginPlay()
 
 void AEndlessRunnerGameModeBase::CreateInitialFloorTiles()
 {
+
+	AFloorTile* Tile = AddFloorTile(false);
+
+	if (Tile)
+	{
+		LaneSwitchValues.Add(Tile->LeftLane->GetComponentLocation().Y);
+		LaneSwitchValues.Add(Tile->CenterLane->GetComponentLocation().Y);
+		LaneSwitchValues.Add(Tile->RightLane->GetComponentLocation().Y);
+	}
+
+	// for (float Val : LaneSwitchValues)
+	// 	UE_LOG(LogTemp,Warning,TEXT("LANE VALUE: %f"),Val);
+	AddFloorTile(false);
+	AddFloorTile(false);
+	
 	for (int i=0;i<NumInitialFloorTiles;i++)
 	{
-		AddFloorTile();
+		AddFloorTile(true);
 	}
 }
 
-void AEndlessRunnerGameModeBase::AddFloorTile()
+AFloorTile* AEndlessRunnerGameModeBase::AddFloorTile(const bool bSpawnItems)
 {
 	UWorld* World = GetWorld();
 
@@ -26,7 +42,15 @@ void AEndlessRunnerGameModeBase::AddFloorTile()
 
 		if (Tile)
 		{
+			if (bSpawnItems)
+			{
+				Tile->SpawnItems();
+			}
 			NextSpawnPoint = Tile->GetAttachTransform();
 		}
+
+		return Tile;
 	}
+
+	return nullptr;
 }

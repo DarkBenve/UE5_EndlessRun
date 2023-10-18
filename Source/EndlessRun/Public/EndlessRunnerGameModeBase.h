@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FloorTile.h"
 #include "GameFramework/GameModeBase.h"
 #include "EndlessRunnerGameModeBase.generated.h"
 
+class AFloorTile;
 
 UCLASS()
 class ENDLESSRUN_API AEndlessRunnerGameModeBase : public AGameModeBase
@@ -21,12 +21,15 @@ public:
 
 	UPROPERTY(VisibleInstanceOnly,Category="Runtime")
 	FTransform NextSpawnPoint;
+
+	UPROPERTY(VisibleInstanceOnly,Category="Runtime")
+	TArray<float> LaneSwitchValues;
 	
 	UFUNCTION(BlueprintCallable)
 	void CreateInitialFloorTiles();
 
 	UFUNCTION(BlueprintCallable)
-	void AddFloorTile();
+	AFloorTile* AddFloorTile(const bool bSpawnItems);
 
 protected:
 	virtual void BeginPlay() override;
