@@ -81,7 +81,7 @@ protected:
 	void OnTriggerBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherCamp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	UFUNCTION()
-	void SpawnLaneTile(UArrowComponent* Lane);
+	void SpawnLaneItem(UArrowComponent* Lane, int32& NumBig);
 
 	UFUNCTION()
 	void DestroyFloorTile();

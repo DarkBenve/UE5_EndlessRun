@@ -72,13 +72,14 @@ void AFloorTile::SpawnItems()
 {
 	if (IsValid(SmallObstacleClass) && IsValid(BigObstacleClass) && IsValid(CoinItemClass))
 	{
-		SpawnLaneTile(CenterLane);
-		SpawnLaneTile(LeftLane);
-		SpawnLaneTile(RightLane);	
+		int32 NumBig = 0;
+		SpawnLaneItem(CenterLane,NumBig);
+		SpawnLaneItem(LeftLane,NumBig);
+		SpawnLaneItem(RightLane,NumBig);	
 	}
 }
 
-void AFloorTile::SpawnLaneTile(UArrowComponent* Lane)
+void AFloorTile::SpawnLaneItem(UArrowComponent* Lane, int32& NumBig)
 {
 	const float RandVal = FMath::FRandRange(0.f, 1.f);
 	FActorSpawnParameters SpawnParameters;
@@ -92,7 +93,19 @@ void AFloorTile::SpawnLaneTile(UArrowComponent* Lane)
 	}
 	else if (UKismetMathLibrary::InRange_FloatFloat(RandVal,SpawnPercent2, SpawnPercent3,true,true))
 	{
-		AObstacle* Obstacle = GetWorld()->SpawnActor<AObstacle>(BigObstacleClass,SpawnLocation,SpawnParameters);
+		if (NumBig <= 2)
+		{
+			AObstacle* Obstacle = GetWorld()->SpawnActor<AObstacle>(BigObstacleClass,SpawnLocation,SpawnParameters);
+
+			if (Obstacle)
+			{
+				NumBig += 1;
+			}	
+		}
+		else
+		{
+			AObstacle* Obstacle = GetWorld()->SpawnActor<AObstacle>(SmallObstacleClass,SpawnLocation,SpawnParameters);
+		}
 	}
 	else if (UKismetMathLibrary::InRange_FloatFloat(RandVal,SpawnPercent3, 1.f,true,true))
 	{

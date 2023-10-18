@@ -27,6 +27,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Assets")
 	class USoundBase* DeathSound;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float MoveDownImpulse = -1000.f;
 	
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
 	int32 CurrentLane = 1;
