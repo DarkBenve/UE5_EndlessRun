@@ -37,6 +37,11 @@ void ARunCharacter::BeginPlay()
 
 // Called every frame
 
+void ARunCharacter::AddCoin()
+{
+	RunGameMode->AddCoin();
+}
+
 void ARunCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
